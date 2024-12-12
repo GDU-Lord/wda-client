@@ -1,0 +1,18 @@
+@use "../../../styles/core" as *
+.tile
+  width: 100%
+  height: fit-content
+  display: flex
+  flex-direction: column
+  gap: 10px
+  cursor: pointer
+  &__image
+    aspect-ratio: 1.62
+    width: 100%
+    background-size: cover
+    background-repeat: no-repeat
+    background-position: center center
+  &__title
+    @include desktop-small-title
+  &__text
+    @include desktop-text

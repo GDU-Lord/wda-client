@@ -1,0 +1,29 @@
+@if(!child.disabled) {
+  <!-- @if(child.double) {
+    <div [class]="child.tripple ? 'tripple-grid' : 'double-grid'">
+      @if(child.tripple) {
+        <img [src]="child.tripple.image.url"/>
+      }
+      <img [src]="child.double.image.url"/>
+      <img [src]="child.image.url"/>
+    </div>
+  } -->
+  @if(child.double) {
+    <div [class]="child.tripple ? 'tripple-grid' : 'double-grid'">
+      @if(child.tripple) {
+        <div class="wrap">
+          <img [src]="child.tripple.image.url"/>
+        </div>
+      }
+      <div class="wrap">
+        <img [src]="child.double.image.url"/>
+      </div>
+      <div class="wrap">
+        <img [src]="child.image.url"/>
+      </div>
+    </div>
+  }
+  @else {
+    <img class="single-image" [src]="child.image.url"/>
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "other": {
+    "event": "Veranstaltung"
+  },
+  "menu": {
+    "news": "Neues",
+    "calendar": "Kalender"
+  },
+  "home": {
+    "contacts": "Kontakte",
+    "popular": "Beliebtes",
+    "relevant": "Zeitnah",
+    "featured": "Vorgesstelltes",
+    "more": "weiter lesen"
+  },
+  "time": {
+    "months": {
+      "jan": "Januar",
+      "feb": "Februar",
+      "mar": "März",
+      "apr": "April",
+      "may": "Mai",
+      "jun": "Juni",
+      "jul": "Juli",
+      "aug": "August",
+      "sep": "September",
+      "oct": "Oktober",
+      "nov": "November",
+      "dec": "Dezember"
+    },
+    "days": {
+      "mon": "Montag",
+      "tue": "Dienstag",
+      "wed": "Mittwoch",
+      "thu": "Donnerstag",
+      "fri": "Freitag",
+      "sat": "Samstag",
+      "sun": "Sonntag"
+    },
+    "days_short": {
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr",
+      "sat": "Sa",
+      "sun": "So"
+    }
+  }
+}

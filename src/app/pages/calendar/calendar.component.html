@@ -1,0 +1,26 @@
+@if(loaded) {
+  <div class="calendar">
+    <div class="calendar__title">{{ 'menu.calendar' | transloco }}</div>
+    <table class="calendar__table">
+      <tbody>
+        @for(event of events; track $index) {
+          <tr>
+            <td class="day">{{ event.date | date:'day' }}</td>
+            <td class="month-time">
+              <div class="date">
+                {{ event.date | date:'month' | transloco }}<br>
+                {{ event.date | date:'day-week' | transloco }}
+              </div>
+              <div class="time">{{ event.date | date:'time' }}</div>
+            </td>
+            <td class="info" [routerLink]="'/' + transloco.getActiveLang() + '/event/' + event.documentId">
+              <div class="type">{{ event.type || ('other.event' | transloco) }}</div>
+              <div class="title">{{ event.title }}</div>
+              <div class="text">{{ event.short_description }}</div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

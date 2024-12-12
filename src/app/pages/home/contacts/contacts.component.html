@@ -1,0 +1,18 @@
+@if (loaded) {
+  @for (row of rows; track $index) {
+    @switch (row[0]) {
+      @case ('text') {
+        <p>{{ row[1] }}</p>
+      }
+      @case ('link') {
+        <p><a [href]="row[1]">{{ row[1] }}</a></p>
+      }
+      @case ('phone') {
+        <p><a [href]="'tel:' + row[1]">{{ row[1] }}</a></p>
+      }
+      @case ('email') {
+        <p><a [href]="'mailto:' + row[1]">{{ row[1] }}</a></p>
+      }
+    }
+  }
+}

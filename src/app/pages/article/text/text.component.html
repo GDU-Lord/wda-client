@@ -1,0 +1,91 @@
+<!-- @if(child.type == "text" && parser.isImage(child.text)) {
+  @if(child.double) {
+    <div class="double-image-container">
+      <div class="image-container">
+        <div class="image-container__background">
+          <div [style]="'background-image: url(\'' + parser.getImageUrl(child.text) + '\')'" class="image-container__background__image"></div>
+        </div>
+        <img [src]="parser.getImageUrl(child.text)" class="image-container__image"/>
+      </div>
+      <div class="image-container">
+        <div class="image-container__background">
+          <div [style]="'background-image: url(\'' + parser.getImageUrl(child.double.text) + '\')'" class="image-container__background__image"></div>
+        </div>
+        <img [src]="parser.getImageUrl(child.double.text)" class="image-container__image"/>
+      </div>
+    </div>
+  }
+  @else if(!child.disabled) {
+    <div class="image-container">
+      <div class="image-container__background">
+        <div [style]="'background-image: url(\'' + parser.getImageUrl(child.text) + '\')'" class="image-container__background__image"></div>
+      </div>
+      <img [src]="parser.getImageUrl(child.text)" class="image-container__image"/>
+    </div>
+  }
+} -->
+@if(child.type == "link") {
+  <a [href]="child.url">
+    @for(element of child.children; track element) {
+      <app-text 
+        [child]="element" 
+        [ignoreBold]="ignoreBold" 
+        [ignoreItalic]="ignoreItalic"
+        [ignoreStrikethrough]="ignoreStrikethrough"
+        [ignoreUnderline]="ignoreUnderline"
+        >
+      </app-text>
+    }
+  </a>
+}
+@else if(!ignoreBold && child.bold) {
+  <b>
+    <app-text 
+      [child]="child" 
+      [ignoreBold]="true" 
+      [ignoreItalic]="ignoreItalic"
+      [ignoreStrikethrough]="ignoreStrikethrough"
+      [ignoreUnderline]="ignoreUnderline"
+      >
+    </app-text>
+  </b>
+}
+@else if(!ignoreItalic && child.italic) {
+  <i>
+    <app-text 
+      [child]="child" 
+      [ignoreBold]="ignoreBold" 
+      [ignoreItalic]="true"
+      [ignoreStrikethrough]="ignoreStrikethrough"
+      [ignoreUnderline]="ignoreUnderline"
+      >
+    </app-text>
+  </i>
+}
+@else if(!ignoreUnderline && child.underline) {
+  <u>
+    <app-text 
+      [child]="child" 
+      [ignoreBold]="ignoreBold" 
+      [ignoreItalic]="ignoreItalic"
+      [ignoreStrikethrough]="ignoreStrikethrough"
+      [ignoreUnderline]="true"
+      >
+    </app-text>
+  </u>
+}
+@else if(!ignoreStrikethrough && child.strikethrough) {
+  <s>
+    <app-text 
+      [child]="child" 
+      [ignoreBold]="ignoreBold" 
+      [ignoreItalic]="ignoreItalic"
+      [ignoreStrikethrough]="true"
+      [ignoreUnderline]="ignoreUnderline"
+      >
+    </app-text>
+  </s>
+}
+@else {
+  <app-plain [text]="child.text"></app-plain>
+}

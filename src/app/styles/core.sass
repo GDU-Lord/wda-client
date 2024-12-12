@@ -1,0 +1,71 @@
+$screen-big: 1281px
+  
+@function columnWidthBig()
+  @return calc(1075px / 3 - 22px)
+
+@function columnWidthSmall()
+  @return calc(84vw / 3 - 1.7vw)
+
+@mixin default-font
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  color: black
+
+@mixin underline
+  text-decoration: underline
+  text-decoration-thickness: 13%
+  text-decoration-style: solid
+
+@mixin no-underline
+  text-decoration: none
+
+@mixin desktop-giant-text
+  font-size: 128px
+  line-height: 147px
+  font-weight: 500
+  @include default-font
+  
+@mixin desktop-page-title
+  font-size: 64px
+  line-height: 73px
+  font-weight: 500
+  @include underline
+  @include default-font
+  
+@mixin desktop-big-title
+  font-size: 40px
+  line-height: 46px
+  font-weight: 700
+  @include default-font
+  
+@mixin desktop-middle-title
+  font-size: 36px
+  line-height: 41px
+  font-weight: 500
+  @include underline
+  @include default-font
+
+@mixin desktop-small-title
+  font-size: 32px
+  line-height: 36px
+  font-weight: 700
+  @include underline
+  @include default-font
+
+@mixin desktop-tiny-title
+  font-size: 24px
+  line-height: 27px
+  font-weight: 500
+  @include default-font
+
+@mixin desktop-mini-title
+  font-size: 20px
+  line-height: 23px
+  font-weight: 700
+  @include underline
+  @include default-font
+
+@mixin desktop-text
+  font-size: 16px
+  line-height: 18px
+  font-weight: 400
+  @include default-font

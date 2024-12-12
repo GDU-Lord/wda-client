@@ -1,0 +1,6 @@
+<div class="tile" [routerLink]="'/' + transloco.getActiveLang() + '/' + entry.type + '/' + entry.documentId">
+  <div class="tile__text">
+    {{ entry.title }}: {{ (entry.type === 'article') ? entry.short_text : entry.short_description }}
+  </div>
+  <div class="tile__image" [style]="'background-image: url(' + loader.imageUrl(entry.tile_cover.url) + ')'"></div>
+</div>

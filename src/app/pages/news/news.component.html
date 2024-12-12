@@ -1,0 +1,6 @@
+<div class="news">
+  <div class="news__title">{{ 'menu.news' | transloco }}</div>
+  @if(loaded === 2) {
+    <app-grid [size]="3" [entries]="grid"></app-grid>
+  }
+</div>

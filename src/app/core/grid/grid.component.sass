@@ -1,0 +1,22 @@
+@use "../../styles/core" as *
+
+.grid
+  width: fit-content
+  display: grid
+  display: flex
+  flex-direction: column
+  gap: 66px
+  .row
+    display: flex
+    flex-direction: row
+    justify-content: left
+    gap: 2.57vw
+    .block
+      width: columnWidthSmall()
+
+@media screen and (min-width: $screen-big)
+  .grid
+    .row
+      gap: 33px
+      .block
+        width: columnWidthBig()

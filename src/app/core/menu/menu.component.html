@@ -1,0 +1,10 @@
+<div class="menu">
+  <div class="menu__left" [routerLink]="'/' + transloco.getActiveLang()">
+    <img src="/img/logo.jpg" class="menu__left__logo"/>
+    <div class="menu__left__title">WDA UA e.V.</div>
+  </div>
+  <div class="menu__right">
+    <div class="button" [routerLink]="'/' + transloco.getActiveLang() + '/news'">{{ 'menu.news' | transloco }}</div>
+    <div class="button" [routerLink]="'/' + transloco.getActiveLang() + '/calendar'">{{ 'menu.calendar' | transloco }}</div>
+  </div>
+</div> 

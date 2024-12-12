@@ -1,0 +1,31 @@
+@if((loadedNews == 2) && (loadedUpcoming == 2)) {
+  <app-cover [title]="upcomingEntry!.title" [image]="upcomingEntry!.image"></app-cover>
+  <div class="container">
+    <app-grid [size]="2" [entries]="mainEntries"></app-grid>
+    <div class="sidebar">
+      <div class="sidebar__block sidebar__contacts">
+        <div class="sidebar__block__title">{{ 'home.contacts' | transloco }}</div>
+        <app-contacts></app-contacts>
+      </div>
+      @if (loadedPopular == 2) {
+      <div class="sidebar__block sidebar__popular">
+        <div class="sidebar__block__title">{{ 'home.popular' | transloco }}</div>
+        <div class="sidebar__popular__entries">
+          @for (entry of popularEntries; track $index) {
+            <app-tiny-tile [entry]="entry"></app-tiny-tile>
+          }
+        </div>
+      </div>
+      }
+      @if ((loadedFeatured == 2) && (featuredEntry != null)) {
+        <div class="sidebar__block">
+          <div class="sidebar__block__title">{{ 'home.featured' | transloco }}</div>
+          <app-small-tile [entry]="featuredEntry"></app-small-tile>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="bottom-container">
+    <div class="more">{{ 'home.more' | transloco }} →</div>
+  </div>
+}

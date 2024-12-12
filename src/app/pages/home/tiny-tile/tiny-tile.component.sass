@@ -1,0 +1,26 @@
+@use "../../../styles/core" as *
+  
+.tile
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  gap: calc(columnWidthSmall() * 0.062)
+  cursor: pointer
+  &__text
+    @include desktop-text
+    width: 100%
+  &__image
+    width: calc(columnWidthSmall() * 0.261)
+    aspect-ratio: 1
+    background-position: center center
+    background-size: cover
+    background-repeat: no-repeat
+  &:hover
+    .tile__text
+      @include underline
+
+@media screen and (min-width: $screen-big)
+  .tile
+    gap: 21px
+    &__image
+      width: 88px

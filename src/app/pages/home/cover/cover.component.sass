@@ -1,0 +1,25 @@
+@use "../../../styles/core" as *
+  
+.cover
+  &__background
+    width: 100%
+    aspect-ratio: 3
+    background-repeat: no-repeat
+    background-size: cover
+    background-position: center center
+  &__shield
+    width: 60%
+    background: white
+    margin: auto
+    text-align: center
+    padding: 17px
+    position: relative
+    bottom: 109px
+    min-height: 144px
+    &__subtitle
+      @include desktop-text
+      text-transform: uppercase
+    &__title
+      @include desktop-big-title
+      width: 71%
+      margin: auto

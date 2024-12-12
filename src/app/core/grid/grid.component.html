@@ -1,0 +1,11 @@
+<div class="grid">
+  @for(row of entryRows; track $index) {
+    <div class="row">
+      @for(entry of row; track $index) {
+        <div class="block">
+          <app-tile [entry]="entry"></app-tile>
+        </div>
+      }
+    </div>
+  }
+</div>

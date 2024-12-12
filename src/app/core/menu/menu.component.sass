@@ -1,0 +1,39 @@
+@use "../../styles/core" as *
+  
+.menu
+  width: 100%
+  height: 70px
+  margin-bottom: 39px
+  padding: 11.5px 0px
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  &__left
+    width: max-content
+    display: flex
+    flex-direction: row
+    gap: 9px
+    cursor: pointer
+    &__logo
+      width: 47px
+      height: 47px
+    &__title 
+      height: 47px
+      padding: 5.5px 0px
+      @include desktop-middle-title
+      @include no-underline
+    // &:hover
+    //   @include underline
+  &__right
+    display: flex
+    flex-direction: row
+    gap: 42px
+    .button
+      cursor: pointer
+      height: 47px
+      padding: 6.5px 0px
+      @include desktop-tiny-title
+      &:hover
+        @include underline
+      
+      

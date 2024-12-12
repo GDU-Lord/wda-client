@@ -1,0 +1,32 @@
+@if(item.format == "unordered") {
+  <ul>
+    @for(element of item.children; track element) {
+        @if(element.type == "list-item") {
+          <li>
+            @for(child of element.children; track child) {
+              <app-text [child]="child"></app-text>
+            }
+          </li>
+        }
+        @else if(element.type == "list") {
+          <app-list [item]="element"></app-list>
+        }
+    }
+  </ul>
+}
+@if(item.format == "ordered") {
+  <ol>
+    @for(element of item.children; track element) {
+        @if(element.type == "list-item") {
+          <li>
+            @for(child of element.children; track child) {
+              <app-text [child]="child"></app-text>
+            }
+          </li>
+        }
+        @else if(element.type == "list") {
+          <app-list [item]="element"></app-list>
+        }
+    }
+  </ol>
+}

@@ -1,0 +1,26 @@
+@use "../../styles/core" as *
+  
+.calendar
+  &__title
+    @include desktop-page-title
+    margin-bottom: 30px
+  &__table
+    width: 100%
+    .day
+      @include desktop-giant-text
+    .month-time
+      @include desktop-text
+      height: min-content
+      padding-top: 33px
+      vertical-align: top
+      .date
+        margin-bottom: 14px
+    .info
+      vertical-align: top
+      padding-top: 33px
+      cursor: pointer
+      .type, .text
+        @include desktop-text
+      .title
+        margin: 3px 0px
+        @include desktop-middle-title

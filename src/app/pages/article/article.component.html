@@ -1,0 +1,79 @@
+@if(loaded) {
+  <div class="title">{{ title }}</div>
+  <div class="subtitle">
+    {{ 
+      (
+        (date | date:'day-week-short' | transloco)+" "+
+        (date | date:'dd.mm.yy')+", "+
+        (date | date:'time')
+      ) 
+      | timespan:
+      (
+        (endDate | date:'day-week-short' | transloco)+" "+
+        (endDate | date:'dd.mm.yy')+", "+
+        (endDate | date:'time')
+      )
+    }}
+  </div>
+  <div class="_container">
+    @for(item of article; track item) {
+      @if(item.type == "image") {
+        <app-image [child]="item"></app-image>
+      }
+      @if(item.type == "paragraph") {
+        <p>
+          @for(child of item.children; track child) {
+            <app-text [child]="child"></app-text>
+          }
+        </p>
+      }
+      @if(item.type == "heading") {
+        @if(item.level == 1) {
+          <h1>
+            @for(child of item.children; track child) {
+              <app-text [child]="child"></app-text>
+            }
+          </h1>
+        }
+        @if(item.level == 2) {
+          <h2>
+            @for(child of item.children; track child) {
+              <app-text [child]="child"></app-text>
+            }
+          </h2>
+        }
+        @if(item.level == 3) {
+          <h3>
+            @for(child of item.children; track child) {
+              <app-text [child]="child"></app-text>
+            }
+          </h3>
+        }
+        @if(item.level == 4) {
+          <h4>
+            @for(child of item.children; track child) {
+              <app-text [child]="child"></app-text>
+            }
+          </h4>
+        }
+        @if(item.level == 5) {
+          <h5>
+            @for(child of item.children; track child) {
+              <app-text [child]="child"></app-text>
+            }
+          </h5>
+        }
+        @if(item.level == 6) {
+          <h6>
+            @for(child of item.children; track child) {
+              <app-text [child]="child"></app-text>
+            }
+          </h6>
+        }
+      }
+      @if(item.type == "list") {
+        <app-list [item]="item"></app-list>
+      }
+    }
+  </div>
+}

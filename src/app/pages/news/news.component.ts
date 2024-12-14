@@ -1,8 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, makeStateKey, OnDestroy, OnInit, PLATFORM_ID, StateKey, TransferState } from '@angular/core';
 import { GridComponent } from '../../core/grid/grid.component';
 import { LoaderService } from '../../core/services/loader.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { isPlatformBrowser } from '@angular/common';
+
+const GRID_KEY = makeStateKey<NewsComponent["grid"]>('grid');
 
 @Component({
   selector: 'app-news',
@@ -18,11 +21,15 @@ export class NewsComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject();
   public grid: gridEntry[] = []; 
   public loaded: number = 0;
+
+  private isBrowser: boolean;
   
-  constructor(private loader: LoaderService) {}
+  constructor(private loader: LoaderService, private transferState: TransferState) {
+    this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  }
   
   ngOnInit(): void {
-    this.loadNews();
+    this.getNews();
   }
 
   sortNews() {
@@ -31,6 +38,13 @@ export class NewsComponent implements OnInit, OnDestroy {
       const d2 = new Date(b.date).getTime();
       return d1 - d2;
     });
+  }
+
+  getNews() {
+    const grid = this.transferState.get(GRID_KEY, null);
+    if(grid == null) return this.loadNews();
+    this.grid = grid;
+    this.loaded = 2;
   }
 
   loadNews() {
@@ -49,6 +63,7 @@ export class NewsComponent implements OnInit, OnDestroy {
       })];
       this.sortNews();
       this.loaded ++;
+      this.transferState.set(GRID_KEY, this.grid);
     });
     this.loader.loadArticles('all').pipe(takeUntil(this.destroy$)).subscribe(({data}) => {
       this.grid = [...this.grid, ...data.map(article => {
@@ -65,6 +80,7 @@ export class NewsComponent implements OnInit, OnDestroy {
       })];
       this.sortNews();
       this.loaded ++;
+      this.transferState.set(GRID_KEY, this.grid);
     });
   }
 

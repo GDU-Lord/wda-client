@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, makeStateKey, PLATFORM_ID, TransferState } from '@angular/core';
 import { GridComponent } from '../../core/grid/grid.component';
 import { CoverComponent } from './cover/cover.component';
 import { TinyTileComponent } from './tiny-tile/tiny-tile.component';
@@ -7,6 +7,12 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Subject, takeUntil } from 'rxjs';
 import { LoaderService } from '../../core/services/loader.service';
 import { ContactsComponent } from './contacts/contacts.component';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+
+const NEWS_KEY = makeStateKey<HomeComponent["mainEntries"]>('news');
+const POPULAR_KEY = makeStateKey<HomeComponent["popularEntries"]>('popular');
+const FEATURED_KEY = makeStateKey<HomeComponent["featuredEntry"]>('featured');
+const UPCOMING_KEY = makeStateKey<HomeComponent["upcomingEntry"]>('upcoming');
 
 @Component({
   selector: 'app-home',
@@ -40,14 +46,46 @@ export class HomeComponent {
   public loadedPopular: 0 | 1 | 2 = 0;
   public loadedFeatured: 0 | 1 | 2 = 0;
   public loadedUpcoming: 0 | 1 | 2 = 0;
+
+  private isBrowser: boolean;
   
-  constructor(private loader: LoaderService) {}
+  constructor(private loader: LoaderService, private transferState: TransferState) {
+    this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  }
   
   ngOnInit(): void {
-    this.loadNews();
-    this.loadPopular();
-    this.loadFeatured();
-    this.loadUpcoming();
+    this.getNews();
+    this.getPopular();
+    this.getFeatured();
+    this.getUpcoming();
+  }
+
+  getNews() {
+    const d = this.transferState.get(NEWS_KEY, null);
+    if(d == null) return this.loadNews();
+    this.mainEntries = d;
+    this.loadedNews = 2;
+  }
+
+  getPopular() {
+    const d = this.transferState.get(POPULAR_KEY, null);
+    if(d == null) return this.loadPopular();
+    this.popularEntries = d;
+    this.loadedPopular = 2;
+  }
+
+  getFeatured() {
+    const d = this.transferState.get(FEATURED_KEY, null);
+    if(d == null) return this.loadFeatured();
+    this.featuredEntry = d;
+    this.loadedFeatured = 2;
+  }
+
+  getUpcoming() {
+    const d = this.transferState.get(UPCOMING_KEY, null);
+    if(d == null) return this.loadUpcoming();
+    this.upcomingEntry = d;
+    this.loadedUpcoming = 2;
   }
 
   sortNews() {
@@ -74,6 +112,7 @@ export class HomeComponent {
       })];
       this.sortNews();
       this.loadedNews ++;
+      this.transferState.set(NEWS_KEY, this.mainEntries);
     });
     this.loader.loadArticles('all').pipe(takeUntil(this.destroy$)).subscribe(({data}) => {
       this.mainEntries = [...this.mainEntries, ...data.map(article => {
@@ -89,6 +128,7 @@ export class HomeComponent {
       })];
       this.sortNews();
       this.loadedNews ++;
+      this.transferState.set(NEWS_KEY, this.mainEntries);
     });
   }
 
@@ -100,6 +140,7 @@ export class HomeComponent {
         return data;
       })]);
       this.loadedPopular ++;
+      this.transferState.set(POPULAR_KEY, this.popularEntries);
     });
     this.loader.loadArticles('popular').pipe(takeUntil(this.destroy$)).subscribe(({data}) => {
       this.popularEntries = this.loader.sortEntries([...this.popularEntries, ...data.map(data => {
@@ -107,6 +148,7 @@ export class HomeComponent {
         return data;
       })]);
       this.loadedPopular ++;
+      this.transferState.set(POPULAR_KEY, this.popularEntries);
     });
   }
 
@@ -118,6 +160,7 @@ export class HomeComponent {
       if(entry != null) {
         entry.type = 'event';
         this.featuredEntry = entry;
+        this.transferState.set(FEATURED_KEY, this.featuredEntry);
       }
       this.loadedFeatured ++;
     });
@@ -126,6 +169,7 @@ export class HomeComponent {
       if(entry != null) {
         entry.type = 'article';
         this.featuredEntry = this.featuredEntry ?? entry; // prioritize events
+        this.transferState.set(FEATURED_KEY, this.featuredEntry);
       }
       this.loadedFeatured ++;
     });
@@ -162,6 +206,7 @@ export class HomeComponent {
           type: 'home'
         };
         this.loadedUpcoming ++;
+        this.transferState.set(UPCOMING_KEY, this.upcomingEntry);
       });
     }
     else {
@@ -172,6 +217,7 @@ export class HomeComponent {
         type: entry.type
       };
       this.loadedUpcoming ++;
+      this.transferState.set(UPCOMING_KEY, this.upcomingEntry);
     }
   }
 

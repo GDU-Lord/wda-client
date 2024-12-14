@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID, TransferState } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { TranslocoService } from '@jsverse/transloco';
+import { isPlatformServer } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,10 @@ import { TranslocoService } from '@jsverse/transloco';
 export class LoaderService {
 
   public url = environment.api;
+  private isServer: boolean;
 
-  constructor(private http: HttpClient, private transloco: TranslocoService) {
-
+  constructor(private http: HttpClient, private transloco: TranslocoService, private transferState: TransferState) {
+    this.isServer = isPlatformServer(inject(PLATFORM_ID));
   }
 
   getStrapiLocale(lang: string) {

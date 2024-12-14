@@ -1,6 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, makeStateKey, OnDestroy, OnInit, PLATFORM_ID, TransferState } from '@angular/core';
 import { LoaderService } from '../../../core/services/loader.service';
 import { Subject, takeUntil } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
+
+const CONTACTS_KEY = makeStateKey<ContactsComponent["rows"]>('contacts');
 
 @Component({
   selector: 'app-contacts',
@@ -11,17 +14,33 @@ import { Subject, takeUntil } from 'rxjs';
 
 export class ContactsComponent implements OnDestroy, OnInit {
 
-  destroy$: Subject<void> = new Subject();
-  loaded: boolean = false;
-  rows: contact[] = [];
+  private destroy$: Subject<void> = new Subject();
 
-  constructor(private loader: LoaderService) {}
+  public loaded: boolean = false;
+  public rows: contact[] = [];
+
+  private isBrowser: boolean;
+
+  constructor(private loader: LoaderService, private transferState: TransferState) {
+    this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  }
 
   ngOnDestroy(): void {
     this.destroy$.complete();
   }
 
   ngOnInit(): void {
+    this.getContacts();
+  }
+
+  getContacts() {
+    const d = this.transferState.get(CONTACTS_KEY, null);
+    if(d == null) return this.loadContacts();
+    this.rows = d;
+    this.loaded = true;
+  }
+
+  loadContacts(): void {
     this.loaded = false;
     this.loader.loadContacts().pipe(takeUntil(this.destroy$)).subscribe(({data: {contacts}}) => {
       this.rows = contacts.split('\n').map((str): contact => {
@@ -35,6 +54,7 @@ export class ContactsComponent implements OnDestroy, OnInit {
         return [type, str];
       });
       this.loaded = true;
+      this.transferState.set(CONTACTS_KEY, this.rows);
     });
   }
 

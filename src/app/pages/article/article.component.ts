@@ -61,12 +61,16 @@ export class ArticleComponent implements OnInit, OnDestroy, article_data {
 
   getArticle() {
     const d = this.transferState.get(ARTICLE_KEY, null);
-    if(d == null) return this.loadArticle();
+    if((d == null) || (this.getId() !== d.id)) return this.loadArticle();
     this.article = d.article;
     this.title = d.title;
     this.date = d.date;
     this.endDate = d.endDate;
     this.loaded = true;
+  }
+
+  getId() {
+    return this.route.snapshot.paramMap.get('id') ?? "";
   }
 
   loadArticle() {

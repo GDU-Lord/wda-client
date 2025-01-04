@@ -25,18 +25,23 @@
   }
 } -->
 @if(child.type == "link") {
-  <a [href]="child.url">
-    @for(element of child.children; track element) {
-      <app-text 
-        [child]="element" 
-        [ignoreBold]="ignoreBold" 
-        [ignoreItalic]="ignoreItalic"
-        [ignoreStrikethrough]="ignoreStrikethrough"
-        [ignoreUnderline]="ignoreUnderline"
-        >
-      </app-text>
-    }
-  </a>
+  @if(isVideo(child)) {
+    <iframe [src]="getEmbedLink(child.url)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  }
+  @else {
+    <a [href]="child.url">
+      @for(element of child.children; track element) {
+        <app-text 
+          [child]="element" 
+          [ignoreBold]="ignoreBold" 
+          [ignoreItalic]="ignoreItalic"
+          [ignoreStrikethrough]="ignoreStrikethrough"
+          [ignoreUnderline]="ignoreUnderline"
+          >
+        </app-text>
+      }
+    </a>
+  }
 }
 @else if(!ignoreBold && child.bold) {
   <b>

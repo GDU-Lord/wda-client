@@ -44,4 +44,12 @@ export class ParserService {
   setMedia(media: string[]) {
     this.media = media;
   }
+
+  processImages(article: any) {
+    return article.map((child: any) => {
+      const [success, res] = this.processChild(child);
+      return success ? res : child;
+    });
+  }
+
 }

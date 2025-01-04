@@ -1,28 +1,50 @@
+@use "../../../styles/core" as *
+  
+$max-image-height: 31vw
+$max-image-height-big: 400px
 
-
-.single-image
-  width: 100%
+.single-image-container
+  width: fit-content
+  margin: auto
+  .single-image
+    width: auto
+    max-height: $max-image-height
+    max-width: 100%
 
 .tripple-grid
   display: grid
   grid-template-columns: repeat(3, 1fr)
-  gap: 10px
-  width: 100%
+  gap: 3.5vw
+  width: auto
+  max-height: $max-image-height
   .wrap
     display: block
     img
       object-fit: cover
       width: 100%
       height: 100%
+      max-height: $max-image-height
 
 .double-grid
   display: grid
   grid-template-columns: repeat(2, 1fr)
-  gap: 10px
-  width: 100%
+  gap: 3.5vw
+  width: auto
+  max-height: $max-image-height
   .wrap
     display: block
     img
       object-fit: cover
       width: 100%
       height: 100%
+      max-height: $max-image-height
+
+@media screen and (min-width: $screen-big)
+  .double-grid, .tripple-grid
+    gap: 45px
+    .wrap
+      img
+        max-height: $max-image-height-big
+  .single-image-container
+    .single-image
+      max-height: $max-image-height-big

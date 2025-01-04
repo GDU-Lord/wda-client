@@ -1,11 +1,12 @@
-import { Component, inject, makeStateKey, OnDestroy, OnInit, PLATFORM_ID, StateKey, TransferState } from '@angular/core';
+import { Component, makeStateKey, OnDestroy, OnInit, StateKey, TransferState } from '@angular/core';
 import { GridComponent } from '../../core/grid/grid.component';
 import { LoaderService } from '../../core/services/loader.service';
 import { Subject, takeUntil } from 'rxjs';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { isPlatformBrowser } from '@angular/common';
 
 const GRID_KEY = makeStateKey<NewsComponent["grid"]>('grid');
+const LANGUAGE_KEY = makeStateKey<string>('language');
 
 @Component({
   selector: 'app-news',
@@ -21,12 +22,12 @@ export class NewsComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject();
   public grid: gridEntry[] = []; 
   public loaded: number = 0;
-
-  private isBrowser: boolean;
   
-  constructor(private loader: LoaderService, private transferState: TransferState) {
-    this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  }
+  constructor(
+    private loader: LoaderService, 
+    private transferState: TransferState,
+    private transloco: TranslocoService,
+  ) {}
   
   ngOnInit(): void {
     this.getNews();
@@ -42,7 +43,8 @@ export class NewsComponent implements OnInit, OnDestroy {
 
   getNews() {
     const grid = this.transferState.get(GRID_KEY, null);
-    if(grid == null) return this.loadNews();
+    const l = this.transferState.get(LANGUAGE_KEY, null);
+    if(grid == null || l !== this.transloco.getActiveLang()) return this.loadNews();
     this.grid = grid;
     this.loaded = 2;
   }
@@ -64,11 +66,11 @@ export class NewsComponent implements OnInit, OnDestroy {
       this.sortNews();
       this.loaded ++;
       this.transferState.set(GRID_KEY, this.grid);
+      this.transferState.set(LANGUAGE_KEY, this.transloco.getActiveLang());
     });
     this.loader.loadArticles('all').pipe(takeUntil(this.destroy$)).subscribe(({data}) => {
       this.grid = [...this.grid, ...data.map(article => {
         article.type = 'article';
-        console.log(article);
         return {
           short_description: article.short_text,
           title: article.title,
@@ -81,6 +83,7 @@ export class NewsComponent implements OnInit, OnDestroy {
       this.sortNews();
       this.loaded ++;
       this.transferState.set(GRID_KEY, this.grid);
+      this.transferState.set(LANGUAGE_KEY, this.transloco.getActiveLang());
     });
   }
 

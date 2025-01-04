@@ -1,7 +1,9 @@
 @use "../../styles/core" as *
 
-*
-  @include desktop-text
+p
+  @include desktop-mini-title
+  @include no-underline
+  font-weight: 300
 
 .title
   @include desktop-page-title
@@ -9,3 +11,26 @@
 
 .subtitle
   @include desktop-tiny-title
+  @include no-underline
+
+h1
+  @include desktop-page-title
+
+h2
+  @include desktop-large-title
+  
+h3
+  @include desktop-middle-title
+  
+h4
+  @include desktop-small-title
+
+h5
+  @include desktop-tiny-title
+
+h6
+  @include desktop-tiny-title
+
+h1, h2, h3, h4, h5, h6
+  @include no-underline
+  margin: 0

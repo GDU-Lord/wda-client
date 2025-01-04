@@ -1,7 +1,12 @@
 @if((loadedNews == 2) && (loadedUpcoming == 2)) {
   <app-cover [title]="upcomingEntry!.title" [image]="upcomingEntry!.image"></app-cover>
   <div class="container">
-    <app-grid [size]="2" [entries]="mainEntries"></app-grid>
+    <div class="grid-container">
+      <app-grid [size]="2" [entries]="mainEntries"></app-grid>
+      <div class="more-container">
+        <div class="more" [routerLink]="'news'">{{ 'home.more' | transloco }} →</div>
+      </div>
+    </div>
     <div class="sidebar">
       <div class="sidebar__block sidebar__contacts">
         <div class="sidebar__block__title">{{ 'home.contacts' | transloco }}</div>
@@ -25,7 +30,7 @@
       }
     </div>
   </div>
-  <div class="bottom-container">
+  <!-- <div class="bottom-container">
     <div class="more">{{ 'home.more' | transloco }} →</div>
-  </div>
+  </div> -->
 }

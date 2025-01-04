@@ -15,10 +15,10 @@ export class ImageComponent implements OnInit {
   constructor(public parser: ParserService) {}
 
   ngOnInit(): void {
-    const [success, child] = this.parser.processChild(this.child);
-    if(success) {
-      this.child = child;
-    }
+    // const [success, child] = this.parser.processChild(this.child);
+    // if(success) {
+    //   this.processedChild = child;
+    // }
   }
 
 }

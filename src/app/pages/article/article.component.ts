@@ -1,4 +1,4 @@
-import { Component, inject, makeStateKey, OnDestroy, OnInit, PLATFORM_ID, TransferState } from '@angular/core';
+import { Component, makeStateKey, OnDestroy, OnInit, TransferState } from '@angular/core';
 import { LoaderService } from '../../core/services/loader.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ParserService } from '../../core/services/parser.service';
@@ -7,9 +7,8 @@ import { ListComponent } from './text/list/list.component';
 import { ImageComponent } from './image/image.component';
 import { TimespanPipe } from '../../core/services/timespan.pipe';
 import { DatePipe } from '../../core/services/date.pipe';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
 
 interface article_data {
   id: string;
@@ -20,6 +19,7 @@ interface article_data {
 }
 
 const ARTICLE_KEY = makeStateKey<article_data>('article');
+const LANGUAGE_KEY = makeStateKey<string>('language');
 
 @Component({
   selector: 'app-article',
@@ -45,11 +45,13 @@ export class ArticleComponent implements OnInit, OnDestroy, article_data {
   public date: string = "";
   public endDate: string = "";
 
-  private isBrowser: boolean;
-
-  constructor(private loader: LoaderService, private parser: ParserService, private route: ActivatedRoute, private transferState: TransferState) {
-    this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  }
+  constructor(
+    private loader: LoaderService, 
+    private parser: ParserService, 
+    private route: ActivatedRoute, 
+    private transferState: TransferState,
+    private transloco: TranslocoService,
+  ) {}
 
   ngOnDestroy(): void {
     this.destroy$.complete();
@@ -61,8 +63,9 @@ export class ArticleComponent implements OnInit, OnDestroy, article_data {
 
   getArticle() {
     const d = this.transferState.get(ARTICLE_KEY, null);
-    if((d == null) || (this.getId() !== d.id)) return this.loadArticle();
-    this.article = d.article;
+    const l = this.transferState.get(LANGUAGE_KEY, null);
+    if((d == null) || (l !== this.transloco.getActiveLang()) || (this.getId() !== d.id)) return this.loadArticle();
+    this.article = this.parser.processImages(d.article);
     this.title = d.title;
     this.date = d.date;
     this.endDate = d.endDate;
@@ -80,7 +83,7 @@ export class ArticleComponent implements OnInit, OnDestroy, article_data {
       return e.path === 'event';
     }) != null) {
       this.loader.loadEvent(this.id).pipe(takeUntil(this.destroy$)).subscribe((res) => {
-        this.article = res.data.description;
+        this.article = this.parser.processImages(res.data.description);
         this.title = res.data.title;
         this.date = res.data.date;
         this.endDate = res.data.end_date;
@@ -89,16 +92,18 @@ export class ArticleComponent implements OnInit, OnDestroy, article_data {
         this.transferState.set(ARTICLE_KEY, {
           id, article, title, date, endDate
         });
+        this.transferState.set(LANGUAGE_KEY, this.transloco.getActiveLang());
       });
     }
     else if(this.route.snapshot.url.find(e => {
       return e.path === 'article';
     }) != null) {
       this.loader.loadArticle(this.id).pipe(takeUntil(this.destroy$)).subscribe((res) => {
-        this.article = res.data.text;
+        this.article = this.parser.processImages(res.data.text);
         this.title = res.data.title;
         this.loaded = true;
         this.transferState.set(ARTICLE_KEY, this);
+        this.transferState.set(LANGUAGE_KEY, this.transloco.getActiveLang());
       });
     }
   }

@@ -29,10 +29,16 @@
   margin-top: 57px
   display: flex
   flex-direction: row-reverse
-  .more
-    width: fit-content
-    @include underline
-    @include desktop-tiny-title
+
+.grid-container
+  .more-container
+    display: flex
+    flex-direction: row-reverse
+    .more
+      width: fit-content
+      cursor: pointer
+      @include underline
+      @include desktop-tiny-title
   
 @media screen and (min-width: $screen-big)
   .container

@@ -1,9 +1,10 @@
-import { Component, inject, makeStateKey, OnDestroy, OnInit, PLATFORM_ID, TransferState } from '@angular/core';
+import { Component, makeStateKey, OnDestroy, OnInit, TransferState } from '@angular/core';
 import { LoaderService } from '../../../core/services/loader.service';
 import { Subject, takeUntil } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+import { TranslocoService } from '@jsverse/transloco';
 
 const CONTACTS_KEY = makeStateKey<ContactsComponent["rows"]>('contacts');
+const LANGUAGE_KEY = makeStateKey<string>('language');
 
 @Component({
   selector: 'app-contacts',
@@ -19,11 +20,11 @@ export class ContactsComponent implements OnDestroy, OnInit {
   public loaded: boolean = false;
   public rows: contact[] = [];
 
-  private isBrowser: boolean;
-
-  constructor(private loader: LoaderService, private transferState: TransferState) {
-    this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  }
+  constructor(
+    private loader: LoaderService, 
+    private transferState: TransferState,
+    private transloco: TranslocoService,
+  ) {}
 
   ngOnDestroy(): void {
     this.destroy$.complete();
@@ -35,7 +36,8 @@ export class ContactsComponent implements OnDestroy, OnInit {
 
   getContacts() {
     const d = this.transferState.get(CONTACTS_KEY, null);
-    if(d == null) return this.loadContacts();
+    const l = this.transferState.get(LANGUAGE_KEY, null);
+    if(d == null || l !== this.transloco.getActiveLang()) return this.loadContacts();
     this.rows = d;
     this.loaded = true;
   }
@@ -55,6 +57,7 @@ export class ContactsComponent implements OnDestroy, OnInit {
       });
       this.loaded = true;
       this.transferState.set(CONTACTS_KEY, this.rows);
+      this.transferState.set(LANGUAGE_KEY, this.transloco.getActiveLang());
     });
   }
 

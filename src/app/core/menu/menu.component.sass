@@ -29,11 +29,28 @@
     flex-direction: row
     gap: 42px
     .button
+      user-select: none
       cursor: pointer
       height: 47px
       padding: 6.5px 0px
       @include desktop-tiny-title
       &:hover
         @include underline
+    .button.lang
+      display: flex
+      gap: 5px
+      .gray
+        color: gray
+      .selected
+        @include underline
+      &:hover
+        @include no-underline
+        .gray
+          @include underline
+        .selected
+          @include no-underline
+
+          
+
       
       

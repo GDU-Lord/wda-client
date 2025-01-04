@@ -57,3 +57,45 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+# Deployment notes
+
+## Strapi deployment
+
+### Build and run
+
+npm run build:win (local)
+npm run start:prod (remote)
+
+### Update images urls in the db
+
+sqlite3 /.tmp/data.db
+
+`UPDATE events`
+`SET description = REPLACE(description, 'http://localhost:1337', '<address>')`
+`WHERE description LIKE '%http://localhost:1337%';`
+
+`UPDATE articles`
+`SET text = REPLACE(text, 'http://localhost:1337', '<address>')`
+`WHERE text LIKE '%http://localhost:1337%';`
+
+## Client deployment
+
+### setup
+`mv serve.sh /client/server/serve.sh`
+
+### run
+
+`cd /client/server/serve.sh`
+`chmod u+x serve.sh`
+`./serve.sh`
+^Z
+`disown -h %<NUMBER>`
+`bg <NUMBER>`
+
+### stop
+
+`netstat -nlp | grep 4000`
+`kill <PROCESS NUMBER>`
+

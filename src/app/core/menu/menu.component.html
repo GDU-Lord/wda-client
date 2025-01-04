@@ -6,5 +6,21 @@
   <div class="menu__right">
     <div class="button" [routerLink]="'/' + transloco.getActiveLang() + '/news'">{{ 'menu.news' | transloco }}</div>
     <div class="button" [routerLink]="'/' + transloco.getActiveLang() + '/calendar'">{{ 'menu.calendar' | transloco }}</div>
+    @switch (transloco.getActiveLang()) {
+      @case ("de") {
+        <div class="button lang" [routerLink]="langUrl">
+          <div class="gray">ukr</div>
+          <div>/</div>
+          <div class="selected">de</div>
+        </div>
+      }
+      @case ("ua") {
+        <div class="button lang" [routerLink]="langUrl">
+          <div class="selected">ukr</div>
+          <div>/</div>
+          <div class="gray">de</div>
+        </div>
+      }
+    }
   </div>
 </div> 

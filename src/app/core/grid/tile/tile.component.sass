@@ -13,6 +13,17 @@
     background-repeat: no-repeat
     background-position: center center
   &__title
-    @include desktop-small-title
+    display: flex
+    flex-direction: row
+    gap: 5px
+    &__text
+      @include desktop-small-title
+    &__icon
+      font-size: 36px
+      line-height: 36px
+      width: 36px
+      height: 36px
+      position: relative
+      top: 4px
   &__text
     @include desktop-text

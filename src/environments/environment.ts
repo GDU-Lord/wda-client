@@ -1,5 +1,8 @@
 export const environment = {
-  baseUrl: 'http://localhost:4200',
+  baseUrl: {
+    server: 'http://0.0.0.0:4000',
+    client: ""
+  },
   isDev: false,
-  api: "http://95.179.249.77:1337"
+  api: "http://95.179.249.77:1337" // make it vary depending on the platform
 };
